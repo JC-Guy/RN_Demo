@@ -6,7 +6,9 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { Component } from "react";
+import Main from "./src/routers/index";
+// import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -141,3 +143,11 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+// export default class App extends Component {
+//   constructor(props) {
+//     super(props)
+//   }
+//   render() {
+//     return <Main />
+//   }
+// }
