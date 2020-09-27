@@ -5,9 +5,12 @@
  * @format
  * @flow strict-local
  */
-
-import React, { Component } from "react";
-// import React from 'react';
+import 'react-native-gesture-handler';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Home from "./src/screens/Home/index";
+import Content from "./src/screens/content/index";
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,7 +18,7 @@ import {
   View,
   Text,
   StatusBar,
-  Image,
+  Image, Button
 } from 'react-native';
 
 import {
@@ -26,127 +29,69 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+const Stack = createStackNavigator()
 function Cat(props) {
-  const { name } = props;
+  const { name = 'CA' } = props;
   return (
     <View>
       <Text>
-        Cat name is
-        {' '}
-        {name}
+        Cat name is {name}
       </Text>
     </View>
   );
 }
-const App = () => (
-  <>
-    <StatusBar barStyle="dark-content" />
-
-    <SafeAreaView>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}
-      >
-        <Header />
-        {global.HermesInternal == null ? null : (
-          <View style={styles.engine}>
-            <Text style={styles.footer}> Engine: Hermes </Text>
-          </View>
-        )}
-        <Text>看看哟没有生效 </Text>
-        <Cat name="Mara" />
-        <Image
-          source={{
-            uri: 'https://reactnative.dev/docs/assets/p_cat2.png',
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#567787'
+          },
+          headerTintColor: '#999',
+          headerTitleStyle: {
+            fontWeight: 'bold'
+          }
+        }
+        }>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'MyHome',
+            headerStyle: {
+              backgroundColor: "orange"
+            }
           }}
-          style={styles.imageCat}
-        />
-        <View style={styles.body}>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}> Step One </Text>
-            <Text style={styles.sectionDescription}>
-              Edit
-              {' '}
-              <Text style={styles.highlight}> App.js </Text>
-              {' '}
-              to change
-              this screen and then come back to see your edits.
-            </Text>
-          </View>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}> See Your Changes </Text>
-            <Text style={styles.sectionDescription}>
-              <ReloadInstructions />
-            </Text>
-          </View>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}> Debug </Text>
-            <Text style={styles.sectionDescription}>
-              <DebugInstructions />
-            </Text>
-          </View>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}> Learn More </Text>
-            <Text style={styles.sectionDescription}>
-              Read the docs to discover what to do next:
-            </Text>
-          </View>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  </>
-);
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+          style={style.homeHeader} />
+        <Stack.Screen
+          name="Content"
+          component={Content}
+          initialParams={{ id: 200 }}
+          options={
+            ({ route }) => ({ title: route.params.title }),
+            {
+              headerTitle: props => <Cat name="CN" {...props} />,
+              headerRight: () => <Button onPress={() => alert('this is right button')} title="Info" color="#757" />,
+              headerStyle: {
+                backgroundColor: "lightblue"
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: "bold"
+              },
+            }
+          } />
+      </Stack.Navigator>
+    </NavigationContainer >
+  )
+}
+const style = StyleSheet.create({
+  homeHeader: {
+    backgroundColor: 'orange'
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-  imageCat: {
-    width: 200,
-    height: 200,
-  },
-});
-
-export default App;
-// export default class App extends Component {
-//   constructor(props) {
-//     super(props)
-//   }
-//   render() {
-//     return <Main />
-//   }
-// }
+  contentHeader: {
+    backgroundColor: 'lightblue'
+  }
+})
